@@ -40,7 +40,7 @@ with st.sidebar:
                         },
         },
         key="1",
-        default_choice=1)
+        default_choice=0)
 
 if selected_task == 'Home Page':
     with st.columns([3,4,3])[1]:
