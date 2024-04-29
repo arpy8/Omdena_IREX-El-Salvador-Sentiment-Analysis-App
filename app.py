@@ -1,8 +1,10 @@
 import streamlit as st
 from st_on_hover_tabs import on_hover_tabs
+
 from utils import set_page_background
-from constants import PAGE_BANNER, PAGE_FAVICON, PAGE_BACKGROUND, ANALYSUS_REPORT_TEMPLATE
 from visualizations import visualization_page
+from analyse_sentiment import analyse_sentiment_page
+from constants import PAGE_BANNER, PAGE_FAVICON, PAGE_BACKGROUND, ANALYSIS_REPORT_TEMPLATE
 
 st.set_page_config(page_title='Sentiment Analysis Tool', page_icon=PAGE_FAVICON, layout='wide')
 set_page_background(PAGE_BACKGROUND)
@@ -47,27 +49,7 @@ if selected_task == 'Home Page':
     st.write(open('assets/html_components/home.html', 'r').read(), unsafe_allow_html=True)
 
 elif selected_task == 'Analyse Sentiment':
-    st.write("""
-            <div style='text-align:center;'>
-                <h1 style='text-align:center; font-size: 300%;'>Analyse Sentiment</h1>
-                <p style=' color: #9c9d9f'>Paste the text to get the analysis report.</p>
-                <hr>
-            </div>
-             """
-    , unsafe_allow_html=True)
-    
-    user_text_input = st.text_area('Paste your text here', key='text')
-    
-    with st.columns(4)[-1]:
-        submit_button_container = st.empty()
-
-    submit_button = submit_button_container.button('Submit', key='submit_button', use_container_width=True)
-    if user_text_input and submit_button:
-        submit_button_container.empty()
-        st.write(ANALYSUS_REPORT_TEMPLATE.format(sentiment_score="N/A", sentiment="N/A", sentiment_category="N/A"))
-
-    elif user_text_input is None and submit_button is not None:
-        st.toast("Text area cannot be empty.", icon="⚠️")
+    analyse_sentiment_page()
 
 elif selected_task == 'Visualizations':
     visualization_page()

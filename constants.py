@@ -2,7 +2,7 @@ PAGE_BANNER = "assets/img/banner.png"
 PAGE_FAVICON = "assets/img/favicon.png"
 PAGE_BACKGROUND = "assets/img/background.jpg"
 
-ANALYSUS_REPORT_TEMPLATE = """
+ANALYSIS_REPORT_TEMPLATE = """
 # Analysis Report
 ---
 ### Sentiment 
