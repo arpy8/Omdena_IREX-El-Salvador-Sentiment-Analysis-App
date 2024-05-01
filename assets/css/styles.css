@@ -47,13 +47,9 @@ div[data-baseweb="popover"] *
     background-color: transparent !important;
 }
 
-/* div[data-baseweb='popover'] * {
-    background-color: transparent;
-} */
-
-/* .navtab {
-    background-color: pink !important;
-} */
+.plotly * {
+    background-color: transparent !important;
+}
 
 @media(hover:hover) and (min-width: 600px) and (max-width: 769px){
 
@@ -77,9 +73,9 @@ div[data-baseweb="popover"] *
         white-space: nowrap;
     }
 
-    section[data-testid='stSidebar']:hover{
+    /* section[data-testid='stSidebar']:hover{
         min-width: 330px !important;
-    }
+    } */
 
     button[kind="header"] {
         display: none;
@@ -113,9 +109,9 @@ div[data-baseweb="popover"] *
         white-space: nowrap;
     }
 
-    section[data-testid='stSidebar']:hover{
+    /* section[data-testid='stSidebar']:hover{
         min-width: 330px !important;
-        }
+        } */
 
     button[kind="header"] {
         display: none;

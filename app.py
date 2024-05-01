@@ -6,22 +6,21 @@ from visualizations import visualization_page
 from analyse_sentiment import analyse_sentiment_page
 from constants import PAGE_BANNER, PAGE_FAVICON, PAGE_BACKGROUND, ANALYSIS_REPORT_TEMPLATE
 
+
 st.set_page_config(page_title='Sentiment Analysis Tool', page_icon=PAGE_FAVICON, layout='wide')
 set_page_background(PAGE_BACKGROUND)
-
-
 
 if 'disable_button' not in st.session_state:
     st.session_state['disable_button'] = False
 
-with st.sidebar:
+with st.sidebar:    
     st.write('<br><br><br><br>', unsafe_allow_html=True)
     selected_task = on_hover_tabs(
         tabName=['Home Page', 'Analyse Sentiment', 'Visualizations', 'About Us'],
         iconName=['home', 'engineering', 'insert_chart', 'contact_support'],
         styles = {
             'navtab': {'background-color':'#ffffff',
-                        'color': '#ff0290',
+                        'color': '#004fc6',
                         'padding': '40px 0px 10px 0px',
                         'border-radius': '0px',
                         'font-size': '18px',
@@ -40,7 +39,7 @@ with st.sidebar:
                         },
         },
         key="1",
-        default_choice=0)
+        default_choice=2)
 
 if selected_task == 'Home Page':
     with st.columns([3,4,3])[1]:

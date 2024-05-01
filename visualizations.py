@@ -1,6 +1,7 @@
+import numpy as np
 import streamlit as st
-import streamlit_highcharts as hct
-
+import plotly.figure_factory as ff
+import plotly.express as px
 
 def visualization_page():
     st.write("""
@@ -12,41 +13,30 @@ def visualization_page():
             """
     , unsafe_allow_html=True)
     
-    chart_def={
-    "title":{
-        "text":"Sales of petroleum products March, Norway",
-        "align":"left"
-    },
-    "xAxis":{
-        "categories":["Jet fuel","Duty-free diesel"]
-    },
-    "yAxis":{
-        "title":{"text":"Million liter"}
-    },
-    "series":[
-            {"type":"column",
-                "name":"2020",
-                "data":[59,83]},
-            {"type":"column",
-                "name":"2021",
-                "data":[24,79]
-            },
-            {"type":"column",
-                "name":"2022",
-                "data":[58,88]
-            },
-            {"type":"spline",
-                "name":"Average",
-                "data":[47,83.33],
-                "marker":{
-                    "lineWidth":2,
-                    "fillColor":"black",
-                }
-            }
-        ]
-    }
+    left, right = st.columns(2)
+    
+    with left:
+        st.write("<center><h3>Distplot</h3></center>", unsafe_allow_html=True)
+        
+        
+        x1 = np.random.randn(200) - 2
+        x2 = np.random.randn(200)
+        x3 = np.random.randn(200) + 2
 
-    st.write("## Example")
-    selSample=st.selectbox("Choose a sample",[hct.SAMPLE11,hct.SAMPLE,hct.SAMPLE2,hct.SAMPLE3,hct.SAMPLE5,hct.SAMPLE7,hct.SAMPLE8],format_func=lambda x: str(x["title"]["text"])
-    )
-    hct.streamlit_highcharts(selSample, 640)
+        hist_data = [x1, x2, x3]
+        group_labels = ['Group 1', 'Group 2', 'Group 3']
+
+        fig = ff.create_distplot(
+                hist_data, group_labels, bin_size=[.1, .25, .5])
+
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with right:
+        st.write("<center><h3>Scatter Plot</h3></center>", unsafe_allow_html=True)
+        
+        df = px.data.gapminder()
+        fig = px.scatter(df.query("year==2007"), x="gdpPercap", y="lifeExp",
+                    size="pop", color="continent",
+                        hover_name="country", log_x=True, size_max=60)
+        
+        st.plotly_chart(fig, use_container_width=True)

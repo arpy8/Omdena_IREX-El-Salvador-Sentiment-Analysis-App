@@ -8,6 +8,7 @@ def analyse_sentiment_page():
                 <h1 style='text-align:center; font-size: 300%;'>Analyse Sentiment</h1>
                 <p style=' color: #9c9d9f'>Paste the text to get the analysis report.</p>
                 <hr>
+                <br>
             </div>
              """
     , unsafe_allow_html=True)
