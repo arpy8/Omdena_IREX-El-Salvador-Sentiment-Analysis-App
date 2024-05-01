@@ -18,7 +18,6 @@ def visualization_page():
     with left:
         st.write("<center><h3>Distplot</h3></center>", unsafe_allow_html=True)
         
-        
         x1 = np.random.randn(200) - 2
         x2 = np.random.randn(200)
         x3 = np.random.randn(200) + 2
