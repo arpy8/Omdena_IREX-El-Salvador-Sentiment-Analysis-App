@@ -1,5 +1,4 @@
-scipy==1.13.0
-plotly==5.18.0
-streamlit==1.33.0
-streamlit-highcharts==0.2.0
-streamlit-on-Hover-tabs==1.0.1
+scipy
+plotly
+streamlit
+streamlit-on-Hover-tabs
