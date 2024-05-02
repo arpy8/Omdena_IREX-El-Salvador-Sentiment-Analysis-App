@@ -23,7 +23,7 @@ with st.sidebar:
                         'color': '#004fc6',
                         'padding': '40px 0px 10px 0px',
                         'border-radius': '0px',
-                        'font-size': '18px',
+                        'font-size': '18px',    
                         'transition': '.5s',
                         'white-space': 'nowrap',
                         'text-transform': 'uppercase',
@@ -39,7 +39,7 @@ with st.sidebar:
                         },
         },
         key="1",
-        default_choice=2)
+        default_choice=0)
 
 if selected_task == 'Home Page':
     with st.columns([3,4,3])[1]:
