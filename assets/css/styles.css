@@ -1,3 +1,7 @@
+/* #root {
+    backdrop-filter: blur(10px);
+} */
+
 section[data-testid='stSidebar'] * {
     background-color: transparent;
     flex-shrink: unset;

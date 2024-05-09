@@ -14,6 +14,8 @@ def set_page_background(png_file):
         {header_css}
         .stApp {{
                 background-image: url("data:image/png;base64,{bin_str}");
+                backdrop-filter: blur(10px ) !important;
+                background-size: cover;
             }}
         </style>
     '''.format(
