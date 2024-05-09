@@ -5,3 +5,5 @@ __pycache__/
 logs.log
 .env
 todo
+test.py
+test2.py

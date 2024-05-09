@@ -4,7 +4,7 @@ from st_on_hover_tabs import on_hover_tabs
 from utils import set_page_background
 from visualizations import visualization_page
 from analyse_sentiment import analyse_sentiment_page
-from constants import PAGE_BANNER, PAGE_FAVICON, PAGE_BACKGROUND, ANALYSIS_REPORT_TEMPLATE
+from constants import PAGE_BANNER, PAGE_FAVICON, PAGE_BACKGROUND
 
 
 st.set_page_config(page_title='Sentiment Analysis Tool', page_icon=PAGE_FAVICON, layout='wide')

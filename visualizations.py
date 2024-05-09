@@ -5,9 +5,9 @@ import plotly.express as px
 
 def visualization_page():
     st.write("""
-        <div style='text-align:center;'>
+        <div style='text-align:center;'>    
             <h1 style='text-align:center; font-size: 300%;'>Visualizations</h1>
-            <p style=' color: #9c9d9f'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, asperiores./p>
+            <p style='color: #ffffff95'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, asperiores.</p>
             <hr>
         </div>
             """
