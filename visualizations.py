@@ -21,7 +21,7 @@ def visualization_page():
             display_word_cloud(df, 'Text_Clean'),
             token_counts_with_simple_tokenizer(df),
             fig1,
-            fig2,
+            fig3,
             # plot_word_number_histogram(df[df['label'] == 0]['Text_Clean'],
             #                         df[df['label'] == 1]['Text_Clean'],
             #                         df[df['label'] == 2]['Text_Clean'],
@@ -43,7 +43,7 @@ def visualization_page():
         graphs = [
             display_target_count(df),
             token_counts_With_bert_tokenizer(df),
-            fig3,
+            fig2,
             fig4
         ]
         

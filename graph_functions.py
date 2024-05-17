@@ -87,7 +87,7 @@ def display_word_cloud(df, column_name, background_color='black', max_words=200,
     )
 
     layout = Layout(
-        title='WordCloud',
+        title='',
         xaxis=dict(showgrid=False, zeroline=False),
         yaxis=dict(showgrid=False, zeroline=False),
         plot_bgcolor=background_color
@@ -96,7 +96,7 @@ def display_word_cloud(df, column_name, background_color='black', max_words=200,
     fig = go.Figure(data=[trace], layout=layout)
     fig.update_layout(yaxis=dict(autorange='reversed'))
     
-    return "WordCloud", fig
+    return "Word Cloud", fig
 
 # ## Target Count
 def display_target_count(df):
@@ -115,7 +115,6 @@ def display_target_count(df):
 def token_counts_with_simple_tokenizer(df):
     # df["tokenized_review"] = df.Text.apply(lambda x: tokenize(x))
     # df["sent_token_length"] = df["tokenized_review"].apply(lambda x: len(x.split()))
-
     fig = px.histogram(df, x="sent_token_length", nbins=20, color_discrete_sequence=px.colors.cmocean.algae, barmode='group', histnorm="percent")
     return "Token counts with Simple Tokenizer", fig
 
@@ -143,9 +142,9 @@ def characters_count_in_the_data(df):
         return title, fig
 
     title1, fig1 = plot_dist(df, 'char_count', 'Characters Count in Data')
-    title2, fig2 = plot_dist(df[df['label'] == 0], 'char_count', 'Characters Count "positive Review')
-    title3, fig3 = plot_dist(df[df['label'] == 1], 'char_count', 'Characters Count "neutral Review')
-    title4, fig4 = plot_dist(df[df['label'] == 2], 'char_count', 'Characters Count "negative Review')
+    title2, fig2 = plot_dist(df[df['label'] == 0], 'char_count', 'Characters Count Positive Review')
+    title3, fig3 = plot_dist(df[df['label'] == 1], 'char_count', 'Characters Count Neutral Review')
+    title4, fig4 = plot_dist(df[df['label'] == 2], 'char_count', 'Characters Count Negative Review')
 
     def mpl_to_plotly_fig(title, fig):
         plotly_fig = go.Figure()
