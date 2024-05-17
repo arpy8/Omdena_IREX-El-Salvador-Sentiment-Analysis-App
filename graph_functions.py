@@ -37,7 +37,7 @@ colors = ['gold', 'mediumturquoise', 'lightgreen'] # darkorange
 
 
 
-df = pd.read_csv(r'assets\dataset\final.csv')
+df = pd.read_csv('https://raw.githubusercontent.com/arpy8/Omdena_IREX-El-Salvador-Sentiment-Analysis-App/main/assets/dataset/final.csv')
 
 def histogram_of_review_rating(df):
     fig = px.histogram(df,
