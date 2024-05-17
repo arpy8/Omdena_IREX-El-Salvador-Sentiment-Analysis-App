@@ -3,7 +3,7 @@ from graph_functions import *
 
 
 def visualization_page():
-    df = pd.read_csv('./assets/dataset/final.csv')
+    df = pd.read_csv('https://raw.githubusercontent.com/arpy8/Omdena_IREX-El-Salvador-Sentiment-Analysis-App/main/assets/dataset/final.csv')
     
     st.write("""
             <div style='text-align:center;'>    
