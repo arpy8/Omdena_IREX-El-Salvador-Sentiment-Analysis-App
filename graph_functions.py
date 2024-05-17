@@ -55,7 +55,7 @@ def histogram_of_review_rating(df):
     return "Histogram of Review Rating", fig
 
 # ## Word Cloud
-def display_word_cloud(df, column_name, background_color='black', max_words=200, max_font_size=40, scale=1, random_state=1):
+def display_word_cloud(df, column_name, background_color='#000000', max_words=200, max_font_size=40, scale=1, random_state=1):
     text = " ".join(df[column_name].values)
 
     wordcloud = WordCloud(
@@ -146,20 +146,12 @@ def characters_count_in_the_data(df):
     title3, fig3 = plot_dist(df[df['label'] == 1], 'char_count', 'Characters Count Neutral Review')
     title4, fig4 = plot_dist(df[df['label'] == 2], 'char_count', 'Characters Count Negative Review')
 
-    def mpl_to_plotly_fig(title, fig):
-        plotly_fig = go.Figure()
-        plotly_fig.add_trace(go.Histogram(x=df['char_count']))
-        plotly_fig.update_layout(bargap=0)
-        return title, plotly_fig
-
     return (
-            mpl_to_plotly_fig(title1, fig1),
-            mpl_to_plotly_fig(title2, fig2),
-            mpl_to_plotly_fig(title3, fig3),
-            mpl_to_plotly_fig(title4, fig4)
+            (title1, fig1),
+            (title2, fig2),
+            (title3, fig3),
+            (title4, fig4)
         )
-
-    
     
 # # Reviews Lengths
 def plot_review_lengths(df):
@@ -233,28 +225,27 @@ def most_common_words(df):
             y.append(count)
 
     fig = go.Figure(go.Bar(
-                x=y,
-                y=x,
-                orientation='h',  marker=dict(
+            x=y,
+            y=x,
+            orientation='h', 
+            marker=dict(
             color='rgba(50, 171, 96, 0.6)',
             line=dict(
                 color='rgba(50, 171, 96, 1.0)',
                 width=1),
-        ),
-        name='Most common Word',))
+            ),
+            name='Most common Word',))
 
     fig.update_layout( title={
-            'text': "",
+            'text': "Most Common Words",
             'y':0.9,
             'x':0.5,
             'xanchor': 'center',
-            'yanchor': 'top'}, font=dict(
-            family="Courier New, monospace",
-            size=18,
-            color="RebeccaPurple"
-        ))
+            'yanchor': 'top'},
+        )
 
     return "Most Common Words", fig
+
 
 # # Most Common ngrams
 def most_common_ngrams(df):
@@ -284,19 +275,50 @@ def most_common_ngrams(df):
 
     fig.update_layout(
         autosize=False,
-        width=2000,
-        height=600,title=dict(
-            text='',
+        width=800,
+        height=400,title=dict(
+            text='Most Common ngrams',
             x=0.5,
             y=0.95,
-            font=dict(
-            family="Courier New, monospace",
-            size=24,
-            color="RebeccaPurple"
-            )
-        ),)
+        )
+    )
 
     return "Most Common ngrams per Classes", fig
+
+# # Most Common unigrams
+def most_common_unigrams(df):
+    fig = make_subplots(rows=1, cols=3)
+
+    title_ = ["positive", "neutral", "negative"]
+
+    for i in range(3):
+        texts = df[df["label"] == i]['tokenized_review']
+
+        new = texts.str.split()
+        new = new.values.tolist()
+        corpus = [word for i in new for word in i]
+        top_n_bigrams = _get_top_ngram(texts, 1)[:15]
+        x, y = map(list, zip(*top_n_bigrams))
+
+
+        fig.add_trace(go.Bar(
+                    x=y,
+                    y=x,
+                    orientation='h', type="bar",
+            name=title_[i], marker=dict(color=colors[i])), 1, i+1)
+
+
+    fig.update_layout(
+        autosize=True,
+        width=800,
+        height=400,title=dict(
+            text='Most Common Unigram',
+            x=0.5,
+            y=0.95,
+        )
+    )
+
+    return "Most Common Unigram per Classes", fig
 
 # ## Top Bigrams
 def most_common_bigrams(df):
@@ -322,17 +344,13 @@ def most_common_bigrams(df):
 
     fig.update_layout(
         autosize=False,
-        width=2000,
-        height=600,title=dict(
-            text='',
+        width=800,
+        height=400,title=dict(
+            text='Most Common Bigrams',
             x=0.5,
             y=0.95,
-            font=dict(
-            family="Courier New, monospace",
-            size=24,
-            color="RebeccaPurple"
-            )
-        ))
+        )
+    )
 
     return "Most Common Bigrams per Classes", fig  
 
@@ -359,38 +377,21 @@ def most_common_trigrams(df):
 
     fig.update_layout(
         autosize=False,
-        width=2000,
-        height=600,title=dict(
-            text='',
+        width=800,
+        height=400,title=dict(
+            text='Most Common Trigrams',
             x=0.5,
             y=0.95,
-            font=dict(
-            family="Courier New, monospace",
-            size=24,
-            color="RebeccaPurple"
-            )
         ))
 
     return "Most Common Trigrams per Classes", fig
 
 if __name__=="__main__":
-    display_word_cloud(df, 'Text_Clean')
+    display_word_cloud(df, 'Text_Clean').show()
     display_target_count(df).show()
     token_counts_with_simple_tokenizer(df).show()
     token_counts_With_bert_tokenizer(df).show()
     characters_count_in_the_data(df)
-
-    # review_lengths(df[df['label'] == 0], 'char_count',
-    #         'Characters Count Positive Review')
-    # review_lengths(df[df['label'] == 1], 'char_count',
-    #         'Characters Count Neutral Review')
-    # review_lengths(df[df['label'] == 2], 'char_count',
-    #         'Characters Count Negative Review')
-
-    plot_word_number_histogram(df[df['label'] == 0]['Text_Clean'],
-                            df[df['label'] == 1]['Text_Clean'],
-                            df[df['label'] == 2]['Text_Clean'],
-                            )
 
     most_common_words(df).show()
     most_common_ngrams(df).show()

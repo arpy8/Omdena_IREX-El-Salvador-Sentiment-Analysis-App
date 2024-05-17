@@ -13,55 +13,66 @@ def visualization_page():
             </div>
         """, unsafe_allow_html=True)
 
-    left, right = st.columns(2)
     fig1, fig2, fig3, fig4 = characters_count_in_the_data(df)
-    
-    with left:
-        graphs = [
+    left, right = st.columns(2)
+
+    with left:   
+        plotly_graphs = [
             display_word_cloud(df, 'Text_Clean'),
-            token_counts_with_simple_tokenizer(df),
-            fig1,
-            fig3,
-            # plot_word_number_histogram(df[df['label'] == 0]['Text_Clean'],
-            #                         df[df['label'] == 1]['Text_Clean'],
-            #                         df[df['label'] == 2]['Text_Clean'],
-            #                     ),
-            # review_lengths(df[df['label'] == 0], 'char_count',
-            #         'Characters Count "positive Review'),
-            # review_lengths(df[df['label'] == 1], 'char_count',
-            #         'Characters Count "neutral Review'),
-            # review_lengths(df[df['label'] == 2], 'char_count',
-            #         'Characters Count "negative Review'),
+            # token_counts_with_simple_tokenizer(df),
         ]
-            
-        for title, graph in graphs:
-            st.write(f"<center><h4>{title}</h4></center>", unsafe_allow_html=True)
+        
+        for title, graph in plotly_graphs:
+            # st.write(f"<center><h4>{title}</h4></center>", unsafe_allow_html=True)
             st.plotly_chart(graph, use_container_width=True) 
 
+        matplotlib_graphs = [
+            fig1,
+            fig3
+        ]
+        
+        for title, graph in matplotlib_graphs:
+            # st.write(f"<center><h4>{title}</h4></center>", unsafe_allow_html=True)
+            st.pyplot(graph, use_container_width=True) 
 
     with right:
-        graphs = [
+        plotly_graphs = [
             display_target_count(df),
-            token_counts_With_bert_tokenizer(df),
+            # token_counts_With_bert_tokenizer(df),
+        ]
+        
+        for title, graph in plotly_graphs:
+            # st.write(f"<center><h4>{title}</h4></center>", unsafe_allow_html=True)
+            st.plotly_chart(graph, use_container_width=True)
+            
+        matplotlib_graphs = [
             fig2,
             fig4
         ]
         
-        for title, graph in graphs:
-            st.write(f"<center><h4>{title}</h4></center>", unsafe_allow_html=True)
-            st.plotly_chart(graph, use_container_width=True)
-            
-    graphs = [
-        most_common_words(df),
+        for title, graph in matplotlib_graphs:
+            # st.write(f"<center><h4>{title}</h4></center>", unsafe_allow_html=True)
+            st.pyplot(graph, use_container_width=True)
+                 
+    st.plotly_chart(most_common_words(df)[1], use_container_width=True) 
+        
+    plotly_graphs = [
+        most_common_ngrams(df),
+        most_common_unigrams(df),
         most_common_bigrams(df),
         most_common_trigrams(df),
-        most_common_ngrams(df),
     ]
     
-    for title, graph in graphs:
-        st.write(f"<center><h4>{title}</h4></center>", unsafe_allow_html=True)
-        st.plotly_chart(graph, use_container_width=True) 
-        
+    left, right = st.columns(2)
+    
+    with left:
+        for title, graph in plotly_graphs[:2]:
+            st.plotly_chart(graph, use_container_width=True)
+    
+    with right:
+        for title, graph in plotly_graphs[2:]:
+            st.plotly_chart(graph, use_container_width=True)
+    
 
 if __name__=="__main__":
     st.set_page_config(layout="wide")
