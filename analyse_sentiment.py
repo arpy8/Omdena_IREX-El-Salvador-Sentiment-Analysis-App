@@ -33,6 +33,7 @@ def analyse_sentiment_page():
                 "NEG": ["Negative", st.error],
                 "NEU": ["Neutral", st.info]
             }
+            sentiment_score = round(sentiment_score, 5)
             sentiment_category = sentiments[sentiment_category_raw][0]
 
         sentiments[sentiment_category_raw][1](ANALYSIS_REPORT_TEMPLATE.format(sentiment_category=sentiment_category, sentiment_score=sentiment_score))
