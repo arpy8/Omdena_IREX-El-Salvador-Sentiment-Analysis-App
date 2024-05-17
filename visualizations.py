@@ -3,7 +3,7 @@ from graph_functions import *
 
 
 def visualization_page():
-    df = pd.read_csv(r'assets\dataset\final.csv')
+    df = pd.read_csv('./assets/dataset/final.csv')
     
     st.write("""
             <div style='text-align:center;'>    
