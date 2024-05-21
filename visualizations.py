@@ -4,7 +4,7 @@ from graph_functions import *
 import streamlit.components.v1 as components
 
 def visualization_page():
-    df = pd.read_csv(r'misc\output.csv')
+    df = pd.read_csv('assets/dataset/output.csv')
     
     # fig1, fig2, fig3, fig4 = characters_count_in_the_data(df)
     col = st.columns((2.7, 4, 2.7), gap='medium')
