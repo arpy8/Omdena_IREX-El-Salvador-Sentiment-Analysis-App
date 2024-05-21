@@ -1,3 +1,6 @@
+# credits: Sagar Dhal
+
+from PIL import Image
 import pandas as pd
 from wordcloud import WordCloud
 import seaborn as sns
@@ -33,7 +36,7 @@ warnings.filterwarnings('ignore')
 nltk.download('stopwords')
 
 stopWords_nltk = set(stopwords.words('english'))
-colors = ['gold', 'mediumturquoise', 'lightgreen'] # darkorange
+colors = ['#FFBE98', '#F7DED0', '#E2BFB3']
 
 
 
@@ -55,59 +58,127 @@ def histogram_of_review_rating(df):
     return "Histogram of Review Rating", fig
 
 # ## Word Cloud
-def display_word_cloud(df, column_name, background_color='#000000', max_words=200, max_font_size=40, scale=1, random_state=1):
-    text = " ".join(df[column_name].values)
+# def display_word_cloud(df, column_name, background_color='#000000', scale=0.5, random_state=1):
+    # text = " ".join(df[column_name].values)
 
-    wordcloud = WordCloud(
-        background_color=background_color,
-        max_words=max_words,
-        max_font_size=max_font_size,
-        scale=scale,
-        random_state=random_state
-    ).generate(text)
+    # wordcloud = WordCloud(
+    #     background_color=background_color,
+    #     max_words=100,
+    #     max_font_size=40,
+    #     scale=scale,
+    #     random_state=random_state
+    # ).generate(text)
 
-    word_positions = wordcloud.layout_
-    x = []
-    y = []
-    words = []
-    font_sizes = []
+    # word_positions = wordcloud.layout_
+    # x = []
+    # y = []
+    # words = []
+    # font_sizes = []
 
-    for (word, freq), font_size, position, orientation, color in word_positions:
-        x.append(position[0])
-        y.append(position[1])
-        words.append(word)
-        font_sizes.append(font_size)
+    # for (word, freq), font_size, position, orientation, color in word_positions:
+    #     x.append(position[0])
+    #     y.append(position[1])
+    #     words.append(word)
+    #     font_sizes.append(font_size)
 
-    trace = Scatter(
-        x=x,
-        y=y,
-        text=words,
-        mode='text',
-        textfont=dict(size=font_sizes, color='white'),
+    # trace = Scatter(
+    #     x=x,
+    #     y=y,
+    #     text=words,
+    #     mode='text',
+    #     textfont=dict(size=font_sizes, color='white'),
+    # )
+
+    # layout = Layout(
+    #     title='',
+    #     xaxis=dict(showgrid=False, zeroline=False),
+    #     yaxis=dict(showgrid=False, zeroline=False),
+    #     plot_bgcolor=background_color
+    # )
+
+    # fig = go.Figure(data=[trace], layout=layout)
+    # fig.update_layout(yaxis=dict(autorange='reversed'))
+    
+    # return "Word Cloud", fig
+    
+def display_word_cloud(dataframe, column_name):
+    all_text = ' '.join(dataframe[column_name])
+    
+    wordcloud = WordCloud(background_color="#fff", colormap="autumn").generate(all_text)
+    wordcloud_image = wordcloud.to_array()
+
+    fig = go.Figure()
+    
+    fig.add_layout_image(
+        dict(
+            source=Image.fromarray(wordcloud_image),
+            xref="paper", yref="paper",
+            x=0, y=1,
+            sizex=1,
+            sizey=1 ,
+            xanchor="left",
+            yanchor="top",
+            opacity=1,
+            layer="below"
+        )
     )
 
-    layout = Layout(
-        title='',
-        xaxis=dict(showgrid=False, zeroline=False),
-        yaxis=dict(showgrid=False, zeroline=False),
-        plot_bgcolor=background_color
+    fig.update_layout(
+        title_text="Word Cloud",
+        title_y=0.95,
+        title_font=dict(color='#808495', size=15),
+        autosize=False,  
+        height=180,
+        width=180,
+        margin=dict(l=0, r=0, t=20, b=0),
+        xaxis=dict(visible=False),
+        yaxis=dict(visible=False)
     )
-
-    fig = go.Figure(data=[trace], layout=layout)
-    fig.update_layout(yaxis=dict(autorange='reversed'))
     
     return "Word Cloud", fig
 
 # ## Target Count
 def display_target_count(df):
     fig = make_subplots(rows=1, cols=2, specs=[[{"type": "pie"}, {"type": "bar"}]])
-    colors = ['gold', 'mediumturquoise', 'lightgreen']
     fig.add_trace(go.Pie(labels=df.AP.value_counts().index,
-                                values=df.label.value_counts().values), 1, 1)
-    fig.update_traces(hoverinfo='label+percent', textfont_size=20,
-                    marker=dict(colors=colors, line=dict(color='#000000', width=2)))
-    fig.add_trace(go.Bar(x=df.AP.value_counts().index, y=df.label.value_counts().values, marker_color = colors), 1,2)
-    fig.update_layout(title_text="")
+                                values=df.sentiment_numeric.value_counts().values), 1, 1)
+
+    fig.update_traces(hoverinfo='label+percent', 
+                        textfont_size=18,
+                        marker=dict(
+                            colors=colors,
+                            line=dict(
+                                color='#fff', 
+                                width=1
+                            )
+                        )
+                    )
+
+    fig.add_trace(go.Bar(
+                        x=df.AP.value_counts().index, 
+                        y=df.sentiment_numeric.value_counts().values, 
+                        marker_color = colors
+                    ), 1,2)
+
+    fig.update_layout(
+        title_text="Class Distribution",
+        title_y=0.95,
+        title_font=dict(color='#808495', size=15),
+        autosize=True,
+        height=200,
+        margin=dict(l=0, r=0, t=10  , b=10),
+        xaxis=dict(visible=False),
+        yaxis=dict(visible=False)
+    )
+
+    # fig = make_subplots(rows=1, cols=2, specs=[[{"type": "pie"}, {"type": "bar"}]])
+    # colors = ['gold', 'mediumturquoise', 'lightgreen']
+    # fig.add_trace(go.Pie(labels=df.AP.value_counts().index,
+    #                             values=df.label.value_counts().values), 1, 1)
+    # fig.update_traces(hoverinfo='label+percent', textfont_size=20,
+    #                 marker=dict(colors=colors, line=dict(color='#000000', width=2)))
+    # fig.add_trace(go.Bar(x=df.AP.value_counts().index, y=df.label.value_counts().values, marker_color = colors), 1,2)
+    # fig.update_layout(title_text="")
 
     return "Class Distribution", fig
 
@@ -229,20 +300,32 @@ def most_common_words(df):
             y=x,
             orientation='h', 
             marker=dict(
-            color='rgba(50, 171, 96, 0.6)',
+            color='#ffe000',
             line=dict(
-                color='rgba(50, 171, 96, 1.0)',
+                color='#fff',
                 width=1),
             ),
             name='Most common Word',))
 
-    fig.update_layout( title={
-            'text': "Most Common Words",
-            'y':0.9,
-            'x':0.5,
-            'xanchor': 'center',
-            'yanchor': 'top'},
-        )
+    # fig.update_layout( title={
+    #         'y':0.9,
+    #         'x':0.5,
+    #         'xanchor': 'center',
+    #         'yanchor': 'top'},
+    #     )
+    
+    
+    fig.update_layout(font=dict(
+        family="Courier New, monospace",
+        size=18,
+        color="RebeccaPurple"),
+        autosize=True,
+        height=200,
+        margin=dict(l=0, r=0, t=0, b=0),
+        xaxis=dict(visible=False),
+        yaxis=dict(visible=False)
+    )
+
 
     return "Most Common Words", fig
 
@@ -357,34 +440,90 @@ def most_common_bigrams(df):
 # ## Trigram
 def most_common_trigrams(df):
     fig = make_subplots(rows=1, cols=3)
-    title_ = ["negative", "neutral", "positive"]
+
+    title_ = ["positive", "neutral", "negative"]
 
     for i in range(3):
-        texts = df[df["label"] == i]['tokenized_review']
+        texts = df[df["sentiment_numeric"] == i]['tokenized_review']
 
         new = texts.str.split()
         new = new.values.tolist()
         # corpus = [word for i in new for word in i]
-
-        top_n_bigrams = _get_top_ngram(texts, 3)[:15]
+        top_n_bigrams = _get_top_ngram(texts, 2)[:15]
         x, y = map(list, zip(*top_n_bigrams))
+
 
         fig.add_trace(go.Bar(
                     x=y,
                     y=x,
                     orientation='h', type="bar",
-            name=title_[i], marker=dict(color=colors[i])), 1, i+1),
+            name=title_[i], marker=dict(color=colors[i])), 1, i+1)
+
 
     fig.update_layout(
         autosize=False,
-        width=800,
-        height=400,title=dict(
-            text='Most Common Trigrams',
-            x=0.5,
-            y=0.95,
-        ))
-
+        height=250,
+        margin=dict(t=0, b=00, l=0, r=00)
+    )
+    
     return "Most Common Trigrams per Classes", fig
+
+
+#########################################
+
+
+def sentiment_vs_date(data):
+    sentiment_mapping = {"POS": 1, "NEU": 0, "NEG": -1}
+    data['Sentiment_Value'] = data['sentiment_output'].map(sentiment_mapping)
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=data['Date'], 
+        y=data['Sentiment_Value'],
+        mode='lines+markers',
+        marker=dict(symbol='circle', size=8, color="#ff2600"),
+        line=dict(dash='solid'),
+        name='Sentiment'
+    ))
+
+    fig.update_layout(
+        title_text="Class Distribution",
+        title_y=0.95,
+        title_font=dict(color='#808495', size=15),
+        xaxis_title='Date',
+        yaxis_title='Sentiment',
+        xaxis=dict(tickformat='%Y-%m-%d', tickangle=45),
+        yaxis=dict(tickmode='linear'),
+        grid=dict(
+            rows=1,
+            columns=1,
+            pattern='independent'
+        ),
+        autosize=False,
+        height=250,
+        margin=dict(t=20, b=00, l=0, r=00)
+    )
+
+    return "Sentiment vs Date", fig
+
+
+def sentiment_distribution_by_date(data):
+    data['Date'] = pd.to_datetime(data['Date'])
+
+    sentiment_mapping = {"POS": 1, "NEU": 0, "NEG": -1}
+    data['Sentiment_Value'] = data['sentiment_output'].map(sentiment_mapping)
+
+    fig = px.box(data, x='Date', y='Sentiment_Value', title='Sentiment Distribution by Date')
+
+    fig.update_layout(
+        xaxis_title='Date',
+        yaxis_title='Sentiment Value',
+        xaxis_tickangle=45,
+        showlegend=False
+    )
+
+    return "Sentiment Distribution by Date", fig  
 
 if __name__=="__main__":
     display_word_cloud(df, 'Text_Clean').show()
@@ -397,3 +536,4 @@ if __name__=="__main__":
     most_common_ngrams(df).show()
     most_common_bigrams(df).show()
     most_common_trigrams(df).show()
+    
