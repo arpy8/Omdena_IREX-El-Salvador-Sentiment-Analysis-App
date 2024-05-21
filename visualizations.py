@@ -66,7 +66,7 @@ def visualization_page():
             with cols[0]:
                 st.success("⠀❤️12⠀")
             with cols[1]:   
-                st.success("⠀♻️312⠀")
+                st.success("⠀♻️312")
             with cols[2]:
                 st.success("⠀🖇️42⠀")
                 
