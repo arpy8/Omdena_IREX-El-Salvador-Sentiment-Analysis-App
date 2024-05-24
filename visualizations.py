@@ -53,7 +53,7 @@ def visualization_page():
         st.plotly_chart(graph, use_container_width=True)
         
     with col[2]:
-        plotly_graphs = [   
+        plotly_graphs = [
             # token_counts_With_bert_tokenizer(df),
         ]
         
@@ -61,7 +61,7 @@ def visualization_page():
             st.write(f"<center><h4 style='color:#00000090;font-size: 100%;font-weight: 300;'><b>{title}</b></h4></center>", unsafe_allow_html=True)
             st.plotly_chart(graph, use_container_width=True)
         
-        with st.expander('Tweet Analysis Report', expanded=True):
+        with st.expander('Posts Analysis Report', expanded=True):
             cols = st.columns(3 )
             with cols[0]:
                 st.success("⠀❤️12⠀")
@@ -84,7 +84,7 @@ def visualization_page():
 
         with st.expander('Current Stats', expanded=True):
             st.write('''
-                - Most Influential politician: **Mr. John Doe**
+                - Most Influential politician: **N.B**
                 - Trending Hashtags: `#loremipsum`, `#dolorsitamet`
             ''')
         
