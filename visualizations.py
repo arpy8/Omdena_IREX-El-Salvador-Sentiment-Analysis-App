@@ -46,7 +46,7 @@ def visualization_page():
             
             submitted = st.form_submit_button("Submit")
             if submitted:
-                st.write("slider", slider_val)
+                pass
                         
         title, graph = most_common_trigrams(df)
         st.write(f"<center><h4 style='color:#00000090;font-size: 100%;font-weight: 300;'><b>{title}</b></h4></center>", unsafe_allow_html=True)
