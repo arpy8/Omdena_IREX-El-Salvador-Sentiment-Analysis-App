@@ -27,8 +27,8 @@ def load_header(title):
         st.write("""<h2 class='custom' style='color:#00000099'>{}</h2>""".format(title), unsafe_allow_html=True)
     
     with cols[2]:
-        st.image(r"assets\img\PCE.png", use_column_width=True)
+        st.image("assets/img/PCE.png", use_column_width=True)
     with cols[3]:
-        st.image(r"assets\img\omdena_logo.png", use_column_width=True)
+        st.image("assets/img/omdena_logo.png", use_column_width=True)
     
     st.write("---")
