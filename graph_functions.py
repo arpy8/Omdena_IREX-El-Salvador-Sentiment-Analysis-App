@@ -12,17 +12,17 @@ import matplotlib.gridspec as gridspec
 from matplotlib.ticker import MaxNLocator
 import matplotlib.pyplot as plt
 import warnings
-import nltk
-from nltk.corpus import stopwords
+# import nltk
+# from nltk.corpus import stopwords
 
 warnings.filterwarnings("ignore")
 
 # @st.cache_data()
-def download_stopwords():
-    nltk.download('stopwords')
-    return True
+# def download_stopwords():
+#     nltk.download('stopwords')
+#     return True
 
-download_stopwords()
+# download_stopwords()
 
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
@@ -33,9 +33,8 @@ import plotly.graph_objs as go
 from utils import _get_top_ngram
 
 warnings.filterwarnings('ignore')
-nltk.download('stopwords')
 
-stopWords_nltk = set(stopwords.words('english'))
+# stopWords_nltk = set(stopwords.words('english'))
 colors = ['#FFBE98', '#F7DED0', '#E2BFB3']
 
 
@@ -278,31 +277,31 @@ def plot_word_number_histogram(textno, textye, textz):
     return "Words Per Review", fig
 
 # # Most Common Words
-def most_common_words(df):
-    texts = df['tokenized_review']
-    new = texts.str.split()
-    new = new.values.tolist()
-    corpus = [word for i in new for word in i]
-    counter = Counter(corpus)
-    most = counter.most_common()
-    x, y = [], []
+# def most_common_words(df):
+#     texts = df['tokenized_review']
+#     new = texts.str.split()
+#     new = new.values.tolist()
+#     corpus = [word for i in new for word in i]
+#     counter = Counter(corpus)
+#     most = counter.most_common()
+#     x, y = [], []
 
-    for word, count in most[:30]:
-        if word not in stopWords_nltk:
-            x.append(word)
-            y.append(count)
+#     for word, count in most[:30]:
+#         if word not in stopWords_nltk:
+#             x.append(word)
+#             y.append(count)
 
-    fig = go.Figure(go.Bar(
-            x=y,
-            y=x,
-            orientation='h', 
-            marker=dict(
-            color='#ffe000',
-            line=dict(
-                color='#fff',
-                width=1),
-            ),
-            name='Most common Word',))
+#     fig = go.Figure(go.Bar(
+#             x=y,
+#             y=x,
+#             orientation='h', 
+#             marker=dict(
+#             color='#ffe000',
+#             line=dict(
+#                 color='#fff',
+#                 width=1),
+#             ),
+#             name='Most common Word',))
 
     # fig.update_layout( title={
     #         'y':0.9,
@@ -312,58 +311,58 @@ def most_common_words(df):
     #     )
     
     
-    fig.update_layout(font=dict(
-        family="Courier New, monospace",
-        size=18,
-        color="RebeccaPurple"),
-        autosize=True,
-        height=200,
-        margin=dict(l=0, r=0, t=0, b=0),
-        xaxis=dict(visible=False),
-        yaxis=dict(visible=False)
-    )
+    # fig.update_layout(font=dict(
+    #     family="Courier New, monospace",
+    #     size=18,
+    #     color="RebeccaPurple"),
+    #     autosize=True,
+    #     height=200,
+    #     margin=dict(l=0, r=0, t=0, b=0),
+    #     xaxis=dict(visible=False),
+    #     yaxis=dict(visible=False)
+    # )
 
 
-    return "Most Common Words", fig
+    # return "Most Common Words", fig
 
 
 # # Most Common ngrams
-def most_common_ngrams(df):
-    fig = make_subplots(rows=1, cols=3)
-    title_ = ["positive", "neutral", "negative"]
+# def most_common_ngrams(df):
+#     fig = make_subplots(rows=1, cols=3)
+#     title_ = ["positive", "neutral", "negative"]
 
-    for i in range(3):
-        texts = df[df["label"] == i]['tokenized_review']
+#     for i in range(3):
+#         texts = df[df["label"] == i]['tokenized_review']
 
-        new = texts.str.split()
-        new = new.values.tolist()
-        corpus = [word for i in new for word in i]
-        counter = Counter(corpus)
-        most = counter.most_common()
-        x, y = [], []
+#         new = texts.str.split()
+#         new = new.values.tolist()
+#         corpus = [word for i in new for word in i]
+#         counter = Counter(corpus)
+#         most = counter.most_common()
+#         x, y = [], []
 
-        for word, count in most[:30]:
-            if word not in stopWords_nltk:
-                x.append(word)
-                y.append(count)
+#         for word, count in most[:30]:
+#             if word not in stopWords_nltk:
+#                 x.append(word)
+#                 y.append(count)
 
-        fig.add_trace(go.Bar(
-                    x=y,
-                    y=x,
-                    orientation='h', type="bar",
-            name=title_[i], marker=dict(color=colors[i])), 1, i+1)
+#         fig.add_trace(go.Bar(
+#                     x=y,
+#                     y=x,
+#                     orientation='h', type="bar",
+#             name=title_[i], marker=dict(color=colors[i])), 1, i+1)
 
-    fig.update_layout(
-        autosize=False,
-        width=800,
-        height=400,title=dict(
-            text='Most Common ngrams',
-            x=0.5,
-            y=0.95,
-        )
-    )
+#     fig.update_layout(
+#         autosize=False,
+#         width=800,
+#         height=400,title=dict(
+#             text='Most Common ngrams',
+#             x=0.5,
+#             y=0.95,
+#         )
+#     )
 
-    return "Most Common ngrams per Classes", fig
+#     return "Most Common ngrams per Classes", fig
 
 # # Most Common unigrams
 def most_common_unigrams(df):
