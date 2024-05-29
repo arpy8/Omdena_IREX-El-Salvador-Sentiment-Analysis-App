@@ -43,7 +43,7 @@ def home_page():
     """, unsafe_allow_html=True)
     
     
-if __name__=="__main__":
-    st.set_page_config(page_title='Sentiment Analysis Tool', page_icon=PAGE_FAVICON, layout='wide')
-    st.markdown('<style>' + open('./assets/css/styles.css').read() + '</style>', unsafe_allow_html=True)
-    home_page()
+# if __name__=="__main__":
+#     st.set_page_config(page_title='Sentiment Analysis Tool', page_icon=PAGE_FAVICON, layout='wide')
+#     st.markdown('<style>' + open('./assets/css/styles.css').read() + '</style>', unsafe_allow_html=True)
+#     home_page()
