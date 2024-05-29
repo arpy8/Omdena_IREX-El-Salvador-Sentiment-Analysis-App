@@ -1,4 +1,5 @@
 import re
+import streamlit as st
 from sklearn.feature_extraction.text import CountVectorizer
     
 def tokenize(text):
@@ -19,3 +20,15 @@ def _get_top_ngram(corpus, n=None):
                   for word, idx in vec.vocabulary_.items()]
     words_freq = sorted(words_freq, key=lambda x: x[1], reverse=True)
     return words_freq[:15]
+
+def load_header(title):
+    cols = st.columns([4,1,1,2])
+    with cols[0]:
+        st.write("""<h2 class='custom' style='color:#00000099'>{}</h2>""".format(title), unsafe_allow_html=True)
+    
+    with cols[2]:
+        st.image("assets/img/PCE.png", use_column_width=True)
+    with cols[3]:
+        st.image("assets/img/omdena_logo.png", use_column_width=True)
+    
+    st.write("---")
