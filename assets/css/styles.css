@@ -2,6 +2,14 @@
     backdrop-filter: blur(10px);
 } */
 
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap');
+.custom {
+    font-family: "Dosis", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 449;
+    font-style: normal;
+}
+
 section[data-testid='stSidebar'] * {
     background-color: transparent;
     flex-shrink: unset;
@@ -21,6 +29,13 @@ button[data-testid='baseButton-secondary'] {
     /* border-color: #ffffff95; */
     backdrop-filter: blur(100px);
 }
+
+button[data-testid="baseButton-secondaryFormSubmit"]
+{
+    /* padding: 100px 0 !important; */
+    /* background-color: tan !important; */
+}
+
 
 div[data-testid="stMultiSelect"] {
     background-color: transparent;
@@ -54,6 +69,11 @@ div[data-baseweb="popover"] *
 
 .plotly * {
     background-color: transparent !important;
+}
+
+svg[data-testid="stExpanderToggleIcon"]
+{
+    opacity: 0%;
 }
 
 @media(hover:hover) and (min-width: 600px) and (max-width: 769px){

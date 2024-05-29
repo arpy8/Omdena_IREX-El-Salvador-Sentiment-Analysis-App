@@ -95,7 +95,7 @@ def visualization_page():
         
     #     for title, graph in matplotlib_graphs:
     #         # st.write(f"<center><h4>{title}</h4></center>", unsafe_allow_html=True)
-    #         st.pyplot(graph, use_container_width=True)
+    #         st.pyplot(graph, use_container_width=True)    
                  
     # st.plotly_chart(most_common_words(df)[1], use_container_width=True) 
         

@@ -112,25 +112,22 @@ def display_word_cloud(dataframe, column_name):
     fig.add_layout_image(
         dict(
             source=Image.fromarray(wordcloud_image),
-            xref="paper", yref="paper",
+            # xref="paper", yref="paper",
             x=0, y=1,
             sizex=1,
-            sizey=1 ,
-            xanchor="left",
-            yanchor="top",
+            sizey=1.3,
             opacity=1,
-            layer="below"
         )
     )
 
     fig.update_layout(
-        title_text="Word Cloud",
-        title_y=0.95,
-        title_font=dict(color='#808495', size=15),
-        autosize=False,  
-        height=180,
-        width=180,
-        margin=dict(l=0, r=0, t=20, b=0),
+        # title_text="Word Cloud",
+        # title_y=0.95,
+        # title_font=dict(color='#808495', size=15),
+        autosize=False,
+        height=250,
+        width=400,
+        margin=dict(l=0, r=0, t=0, b=0),
         xaxis=dict(visible=False),
         yaxis=dict(visible=False)
     )
@@ -161,12 +158,12 @@ def display_target_count(df):
                     ), 1,2)
 
     fig.update_layout(
-        title_text="Class Distribution",
-        title_y=0.95,
+        title_text="Sentiment Distribution",
+        title_y=1,
         title_font=dict(color='#808495', size=15),
         autosize=True,
-        height=200,
-        margin=dict(l=0, r=0, t=10  , b=10),
+        height=250,
+        margin=dict(l=0, r=0, t=25, b=10),
         xaxis=dict(visible=False),
         yaxis=dict(visible=False)
     )
@@ -180,7 +177,7 @@ def display_target_count(df):
     # fig.add_trace(go.Bar(x=df.AP.value_counts().index, y=df.label.value_counts().values, marker_color = colors), 1,2)
     # fig.update_layout(title_text="")
 
-    return "Class Distribution", fig
+    return "Sentiment Distribution", fig
 
 # # Token Counts with simple tokenizer
 def token_counts_with_simple_tokenizer(df):
@@ -475,11 +472,14 @@ def most_common_trigrams(df):
 def sentiment_vs_date(data):
     sentiment_mapping = {"POS": 1, "NEU": 0, "NEG": -1}
     data['Sentiment_Value'] = data['sentiment_output'].map(sentiment_mapping)
-
+    
+    data['Date'] = pd.to_datetime(data['Date'])
+    data = data.sort_values(by='Date')
+    
     fig = go.Figure()
 
     fig.add_trace(go.Scatter(
-        x=data['Date'], 
+        x=data['Date'],
         y=data['Sentiment_Value'],
         mode='lines+markers',
         marker=dict(symbol='circle', size=8, color="#ff2600"),
@@ -488,9 +488,11 @@ def sentiment_vs_date(data):
     ))
 
     fig.update_layout(
-        title_text="Class Distribution",
-        title_y=0.95,
+        title_text="Sentiment vs Date",
+        title_y=1,
         title_font=dict(color='#808495', size=15),
+        autosize=True,
+        height=250,
         xaxis_title='Date',
         yaxis_title='Sentiment',
         xaxis=dict(tickformat='%Y-%m-%d', tickangle=45),
@@ -500,13 +502,10 @@ def sentiment_vs_date(data):
             columns=1,
             pattern='independent'
         ),
-        autosize=False,
-        height=250,
-        margin=dict(t=20, b=00, l=0, r=00)
+        margin=dict(t=20, b=0, l=0, r=0)
     )
 
     return "Sentiment vs Date", fig
-
 
 def sentiment_distribution_by_date(data):
     data['Date'] = pd.to_datetime(data['Date'])
@@ -524,6 +523,28 @@ def sentiment_distribution_by_date(data):
     )
 
     return "Sentiment Distribution by Date", fig  
+
+
+def sentiment_distribution_by_date(data):
+    sentiment_mapping = {"POS": 1, "NEU": 0, "NEG": -1}
+    data['Sentiment_Value'] = data['sentiment_output'].map(sentiment_mapping)
+
+    #Box plot with Plotly
+    fig = px.box(data, x='Date', y='Sentiment_Value', title='Sentiment Distribution by Date', color_discrete_sequence=['orange']   )
+
+
+    fig.update_layout(
+        xaxis_title='Date',
+        yaxis_title='Sentiment Value',
+        xaxis_tickangle=-45,
+        template='plotly_white',
+        xaxis=dict(
+            rangeslider=dict(visible=True),
+            type="date"
+        )
+    )
+
+    return "Sentiment Distribution by Date", fig
 
 if __name__=="__main__":
     display_word_cloud(df, 'Text_Clean').show()

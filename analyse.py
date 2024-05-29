@@ -1,7 +1,7 @@
 import streamlit as st
 from pysentimiento import create_analyzer
 from constants import ANALYSIS_REPORT_TEMPLATE
-
+from utils import load_header
 
 def analyze_text(text: str):
     analyzer = create_analyzer(task="sentiment", lang="es")
@@ -10,15 +10,7 @@ def analyze_text(text: str):
     return prediction.output, prediction.probas[prediction.output]
 
 def analyse_sentiment_page():
-    st.write("""
-        <div style='text-align:center;'>
-            <h1 style='text-align:center; font-size: 300%;'>Analyse Sentiment</h1>
-            <p style=' color: #ffffff95'>Paste the text to get the analysis report.</p>
-            <hr>
-            <br>
-        </div>
-    """
-    , unsafe_allow_html=True)
+    load_header("Analyse Sentiment")
     
     user_text_input = st.text_area('Paste your text here', key='text', height=200)
     
