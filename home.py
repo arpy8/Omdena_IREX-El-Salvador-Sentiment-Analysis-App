@@ -69,7 +69,6 @@ def home_page():
             <br>
             <br>
             <br>
-            <br>
         """, unsafe_allow_html=True)
         st.write(padding_row, unsafe_allow_html=True)
 
