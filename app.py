@@ -53,7 +53,8 @@ elif selected_task == 'Analyse Sentiment':
     analyse_sentiment_page()
 
 elif selected_task == 'Dashboard':
-    dashboard()
+    with st.spinner("Loading Dashboard..."):
+        dashboard()
     
 elif selected_task == 'About Us':
     about_us_page()

@@ -1,105 +1,35 @@
-# credits: Sagar Dhal
-
-from PIL import Image
-import pandas as pd
-from wordcloud import WordCloud
-import seaborn as sns
-from collections import Counter
-import plotly.express as px
-from plotly.subplots import make_subplots
-import plotly.graph_objects as go
-import matplotlib.gridspec as gridspec
-from matplotlib.ticker import MaxNLocator
-import matplotlib.pyplot as plt
 import warnings
+import pandas as pd
+from PIL import Image
+from wordcloud import WordCloud
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 # import nltk
 # from nltk.corpus import stopwords
+# import seaborn as sns
+# from collections import Counter
+# import plotly.express as px
+# import matplotlib.gridspec as gridspec
+# from matplotlib.ticker import MaxNLocator
+# import matplotlib.pyplot as plt
+# from plotly.graph_objs import Scatter, Layout
 
-warnings.filterwarnings("ignore")
+from generate_pdf import generate_pdf
+from utils import _get_top_ngram
 
-# @st.cache_data()
+warnings.filterwarnings('ignore')
+
 # def download_stopwords():
 #     nltk.download('stopwords')
 #     return True
 
 # download_stopwords()
 
-from wordcloud import WordCloud
-import matplotlib.pyplot as plt
-
-from plotly.graph_objs import Scatter, Layout
-import plotly.graph_objs as go
-
-from utils import _get_top_ngram
-
-warnings.filterwarnings('ignore')
-
 # stopWords_nltk = set(stopwords.words('english'))
 colors = ['#FFBE98', '#F7DED0', '#E2BFB3']
+df = pd.read_csv('./assets/dataset/final.csv')
 
 
-
-df = pd.read_csv('https://raw.githubusercontent.com/arpy8/Omdena_IREX-El-Salvador-Sentiment-Analysis-App/main/assets/dataset/final.csv')
-
-# def histogram_of_review_rating(df):
-#     fig = px.histogram(df,
-#              x = 'AP',
-#              title = 'Histogram of Review Rating',
-#              template = 'ggplot2',
-#              color = 'AP',
-#              color_discrete_sequence= px.colors.sequential.Blues_r,
-#              opacity = 0.8,
-#              height = 525,
-#              width = 835,
-#             )
-
-#     fig.update_yaxes(title='Count')
-#     return "Histogram of Review Rating", fig
-
-# ## Word Cloud
-# def display_word_cloud(df, column_name, background_color='#000000', scale=0.5, random_state=1):
-    # text = " ".join(df[column_name].values)
-
-    # wordcloud = WordCloud(
-    #     background_color=background_color,
-    #     max_words=100,
-    #     max_font_size=40,
-    #     scale=scale,
-    #     random_state=random_state
-    # ).generate(text)
-
-    # word_positions = wordcloud.layout_
-    # x = []
-    # y = []
-    # words = []
-    # font_sizes = []
-
-    # for (word, freq), font_size, position, orientation, color in word_positions:
-    #     x.append(position[0])
-    #     y.append(position[1])
-    #     words.append(word)
-    #     font_sizes.append(font_size)
-
-    # trace = Scatter(
-    #     x=x,
-    #     y=y,
-    #     text=words,
-    #     mode='text',
-    #     textfont=dict(size=font_sizes, color='white'),
-    # )
-
-    # layout = Layout(
-    #     title='',
-    #     xaxis=dict(showgrid=False, zeroline=False),
-    #     yaxis=dict(showgrid=False, zeroline=False),
-    #     plot_bgcolor=background_color
-    # )
-
-    # fig = go.Figure(data=[trace], layout=layout)
-    # fig.update_layout(yaxis=dict(autorange='reversed'))
-    
-    # return "Word Cloud", fig
-    
 def display_word_cloud(dataframe, column_name):
     all_text = ' '.join(dataframe[column_name])
     
@@ -111,7 +41,6 @@ def display_word_cloud(dataframe, column_name):
     fig.add_layout_image(
         dict(
             source=Image.fromarray(wordcloud_image),
-            # xref="paper", yref="paper",
             x=0, y=1,
             sizex=1,
             sizey=1.3,
@@ -133,13 +62,14 @@ def display_word_cloud(dataframe, column_name):
     
     return "Word Cloud", fig
 
+
 # ## Target Count
 def display_target_count(df):
     fig = make_subplots(rows=1, cols=2, specs=[[{"type": "pie"}, {"type": "bar"}]])
     fig.add_trace(go.Pie(labels=df.AP.value_counts().index,
                                 values=df.sentiment_numeric.value_counts().values), 1, 1)
 
-    fig.update_traces(hoverinfo='label+percent', 
+    fig.update_traces(hoverinfo='label+percent',
                         textfont_size=18,
                         marker=dict(
                             colors=colors,
@@ -177,6 +107,77 @@ def display_target_count(df):
     # fig.update_layout(title_text="")
 
     return "Sentiment Distribution", fig
+
+
+# ## Trigram
+def most_common_trigrams(df):
+    fig = make_subplots(rows=1, cols=3)
+
+    title_ = ["positive", "neutral", "negative"]
+
+    for i in range(3):
+        texts = df[df["sentiment_numeric"] == i]['tokenized_review']
+
+        new = texts.str.split()
+        new = new.values.tolist()
+        top_n_bigrams = _get_top_ngram(texts, 2)[:15]
+        x, y = map(list, zip(*top_n_bigrams))
+
+
+        fig.add_trace(go.Bar(
+                    x=y,
+                    y=x,
+                    orientation='h', type="bar",
+            name=title_[i], marker=dict(color=colors[i])), 1, i+1)
+
+
+    fig.update_layout(
+        autosize=False,
+        height=250,
+        margin=dict(t=0, b=00, l=0, r=00)
+    )
+    
+    return "Most Common Trigrams per Classes", fig
+
+
+# Sentiment vs Date
+def sentiment_vs_date(data):
+    sentiment_mapping = {"POS": 1, "NEU": 0, "NEG": -1}
+    data['Sentiment_Value'] = data['sentiment_output'].map(sentiment_mapping)
+    
+    data['Date'] = pd.to_datetime(data['Date'])
+    data = data.sort_values(by='Date')
+    
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=data['Date'],
+        y=data['Sentiment_Value'],
+        mode='lines+markers',
+        marker=dict(symbol='circle', size=8, color="#ff2600"),
+        line=dict(dash='solid'),
+        name='Sentiment'
+    ))
+
+    fig.update_layout(
+        title_text="Sentiment vs Date",
+        title_y=1,
+        title_font=dict(color='#808495', size=15),
+        autosize=True,
+        height=250,
+        xaxis_title='Date',
+        yaxis_title='Sentiment',
+        xaxis=dict(tickformat='%Y-%m-%d', tickangle=45),
+        yaxis=dict(tickmode='linear'),
+        grid=dict(
+            rows=1,
+            columns=1,
+            pattern='independent'
+        ),
+        margin=dict(t=20, b=0, l=0, r=0)
+    )
+    
+    return "Sentiment vs Date", fig
 
 # # Token Counts with simple tokenizer
 # def token_counts_with_simple_tokenizer(df):
@@ -433,79 +434,6 @@ def display_target_count(df):
 
 #     return "Most Common Bigrams per Classes", fig  
 
-# ## Trigram
-def most_common_trigrams(df):
-    fig = make_subplots(rows=1, cols=3)
-
-    title_ = ["positive", "neutral", "negative"]
-
-    for i in range(3):
-        texts = df[df["sentiment_numeric"] == i]['tokenized_review']
-
-        new = texts.str.split()
-        new = new.values.tolist()
-        # corpus = [word for i in new for word in i]
-        top_n_bigrams = _get_top_ngram(texts, 2)[:15]
-        x, y = map(list, zip(*top_n_bigrams))
-
-
-        fig.add_trace(go.Bar(
-                    x=y,
-                    y=x,
-                    orientation='h', type="bar",
-            name=title_[i], marker=dict(color=colors[i])), 1, i+1)
-
-
-    fig.update_layout(
-        autosize=False,
-        height=250,
-        margin=dict(t=0, b=00, l=0, r=00)
-    )
-    
-    return "Most Common Trigrams per Classes", fig
-
-
-#########################################
-
-
-def sentiment_vs_date(data):
-    sentiment_mapping = {"POS": 1, "NEU": 0, "NEG": -1}
-    data['Sentiment_Value'] = data['sentiment_output'].map(sentiment_mapping)
-    
-    data['Date'] = pd.to_datetime(data['Date'])
-    data = data.sort_values(by='Date')
-    
-    fig = go.Figure()
-
-    fig.add_trace(go.Scatter(
-        x=data['Date'],
-        y=data['Sentiment_Value'],
-        mode='lines+markers',
-        marker=dict(symbol='circle', size=8, color="#ff2600"),
-        line=dict(dash='solid'),
-        name='Sentiment'
-    ))
-
-    fig.update_layout(
-        title_text="Sentiment vs Date",
-        title_y=1,
-        title_font=dict(color='#808495', size=15),
-        autosize=True,
-        height=250,
-        xaxis_title='Date',
-        yaxis_title='Sentiment',
-        xaxis=dict(tickformat='%Y-%m-%d', tickangle=45),
-        yaxis=dict(tickmode='linear'),
-        grid=dict(
-            rows=1,
-            columns=1,
-            pattern='independent'
-        ),
-        margin=dict(t=20, b=0, l=0, r=0)
-    )
-
-    return "Sentiment vs Date", fig
-
 # def sentiment_distribution_by_date(data):
 #     data['Date'] = pd.to_datetime(data['Date'])
 
@@ -522,7 +450,6 @@ def sentiment_vs_date(data):
 #     )
 
 #     return "Sentiment Distribution by Date", fig  
-
 
 # def sentiment_distribution_by_date(data):
 #     sentiment_mapping = {"POS": 1, "NEU": 0, "NEG": -1}
@@ -541,6 +468,66 @@ def sentiment_vs_date(data):
 #     )
 
 #     return "Sentiment Distribution by Date", fig
+
+# def histogram_of_review_rating(df):
+#     fig = px.histogram(df,
+#              x = 'AP',
+#              title = 'Histogram of Review Rating',
+#              template = 'ggplot2',
+#              color = 'AP',
+#              color_discrete_sequence= px.colors.sequential.Blues_r,
+#              opacity = 0.8,
+#              height = 525,
+#              width = 835,
+#             )
+
+#     fig.update_yaxes(title='Count')
+#     return "Histogram of Review Rating", fig
+
+# ## Word Cloud
+# def display_word_cloud(df, column_name, background_color='#000000', scale=0.5, random_state=1):
+    # text = " ".join(df[column_name].values)
+
+    # wordcloud = WordCloud(
+    #     background_color=background_color,
+    #     max_words=100,
+    #     max_font_size=40,
+    #     scale=scale,
+    #     random_state=random_state
+    # ).generate(text)
+
+    # word_positions = wordcloud.layout_
+    # x = []
+    # y = []
+    # words = []
+    # font_sizes = []
+
+    # for (word, freq), font_size, position, orientation, color in word_positions:
+    #     x.append(position[0])
+    #     y.append(position[1])
+    #     words.append(word)
+    #     font_sizes.append(font_size)
+
+    # trace = Scatter(
+    #     x=x,
+    #     y=y,
+    #     text=words,
+    #     mode='text',
+    #     textfont=dict(size=font_sizes, color='white'),
+    # )
+
+    # layout = Layout(
+    #     title='',
+    #     xaxis=dict(showgrid=False, zeroline=False),
+    #     yaxis=dict(showgrid=False, zeroline=False),
+    #     plot_bgcolor=background_color
+    # )
+
+    # fig = go.Figure(data=[trace], layout=layout)
+    # fig.update_layout(yaxis=dict(autorange='reversed'))
+    
+    # return "Word Cloud", fig
+    
 
 # if __name__=="__main__":
 #     display_word_cloud(df, 'Text_Clean').show()
