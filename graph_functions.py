@@ -27,8 +27,7 @@ warnings.filterwarnings('ignore')
 
 # stopWords_nltk = set(stopwords.words('english'))
 colors = ['#FFBE98', '#F7DED0', '#E2BFB3']
-df = pd.read_csv('./assets/dataset/final.csv')
-
+# df = pd.read_csv('./assets/dataset/final.csv')
 
 def display_word_cloud(dataframe, column_name):
     all_text = ' '.join(dataframe[column_name])
