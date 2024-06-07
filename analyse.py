@@ -1,34 +1,47 @@
+import pandas as pd
 import streamlit as st
-from pysentimiento import create_analyzer
-from constants import ANALYSIS_REPORT_TEMPLATE
+
 from utils import load_header
+from generate_pdf import generate_pdf
+from graph_functions import sentiment_vs_date, display_target_count, most_common_trigrams, display_word_cloud
 
-def analyze_text(text: str):
-    analyzer = create_analyzer(task="sentiment", lang="es")
-    prediction = analyzer.predict(text)
+df = pd.read_csv('assets/dataset/output.csv')
+
+def construct_pdf():
+    fig1 = sentiment_vs_date(df)
+    fig2 = display_target_count(df)
+    fig3 = most_common_trigrams(df)
+    fig4 = display_word_cloud(df, 'Text_Clean')
     
-    return prediction.output, prediction.probas[prediction.output]
+    return generate_pdf(fig1, fig2, fig3, fig4)
 
-def analyse_sentiment_page():
-    load_header("Analyse Sentiment")
+def analyse():
+    load_header("Analizar Tweet")
     
-    user_text_input = st.text_area('Paste your text here', key='text', height=200)
+    cols = st.columns([5,1])
     
-    with st.columns(4)[-1]:
-        submit_button = st.button('Submit', key='submit_button', use_container_width=True)
+    with cols[0]:
+        twitter_url = st.text_input("Paste your link here:", placeholder="https://x.com/Google/status/1790555395041472948")
+    
+    with cols[1]:
+        st.write("<br>", unsafe_allow_html=True)
+        submitted = st.button("Submit", use_container_width=True)
 
-    if user_text_input and submit_button:
-        with st.spinner('Analyzing the text...'):
-            sentiment_category_raw, sentiment_score = analyze_text(user_text_input)
-            sentiments = {
-                "POS": ["Positive", st.success],
-                "NEG": ["Negative", st.error],
-                "NEU": ["Neutral", st.info]
-            }
-            sentiment_score = round(sentiment_score, 5)
-            sentiment_category = sentiments[sentiment_category_raw][0]
+    if submitted and len(twitter_url)>0:
+        pass
+    
+    master_df = pd.read_excel('assets/dataset/master_dataframe.xlsx')
+    master_df = master_df.astype({'id': str, 'inReplyToId': str, 'Conversation ID': str})
+    st.dataframe(master_df, height=350, use_container_width=True)
+    
+    with st.columns([1,7])[0]:
+        st.download_button(label="Download CSV", data="", file_name="output.csv", use_container_width=True)
+        st.write("<br><br>", unsafe_allow_html=True)
+    
+    st.session_state["dashboard_ready"] = True
 
-        sentiments[sentiment_category_raw][1](ANALYSIS_REPORT_TEMPLATE.format(sentiment_category=sentiment_category, sentiment_score=sentiment_score))
+if __name__=="__main__":
 
-    elif len(user_text_input)==0 and submit_button:
-        st.toast("Text area cannot be empty.", icon="⚠️")
+    st.set_page_config(page_title="Sentiment Analysis Dashboard", page_icon="💬", layout="wide")
+    with st.spinner("Loading Dashboard..."):
+        analyse()

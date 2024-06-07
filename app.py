@@ -1,11 +1,11 @@
 import streamlit as st
 from st_on_hover_tabs import on_hover_tabs
 
+from home import home_page
+from analyse import analyse
 from dashboard import dashboard
-from analyse import analyse_sentiment_page
 from about import about_us_page
 from constants import PAGE_FAVICON
-from home import home_page
 
 
 st.set_page_config(page_title='Sentiment Analysis Tool', page_icon=PAGE_FAVICON, layout='wide')
@@ -14,9 +14,8 @@ st.markdown('<style>' + open('./assets/css/styles.css').read() + '</style>', uns
 with st.sidebar:    
     st.write('<br><br><br>', unsafe_allow_html=True)
     selected_task = on_hover_tabs(
-        # tabName=['Home Page', 'Analyse Sentiment', 'Dashboard', 'About Us'],
-        tabName=['Home Page', 'Dashboard', 'About Us'],
-        iconName=['home', 'insert_chart', 'contact_support'],
+        tabName=['Home Page', 'Analyse Sentiment', 'Dashboard', 'About Us'],
+        iconName=['home', 'engineering', 'insert_chart', 'contact_support'],
         styles = {
             'navtab': {'background-color':'#fff',
                         'color': '#00000080',
@@ -43,7 +42,7 @@ if selected_task == 'Home Page':
     home_page()
 
 elif selected_task == 'Analyse Sentiment':
-    analyse_sentiment_page()
+    analyse()
 
 elif selected_task == 'Dashboard':
     with st.spinner("Loading Dashboard..."):
