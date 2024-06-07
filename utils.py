@@ -31,4 +31,4 @@ def load_header(title):
     with cols[3]:
         st.image("assets/img/omdena_logo.png", use_column_width=True)
     
-    st.write("---")
+    # st.write("---")
