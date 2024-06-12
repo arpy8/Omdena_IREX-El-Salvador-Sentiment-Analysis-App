@@ -1,11 +1,12 @@
+env/
 .venv/
 misc/
 __pycache__/
 
-logs.log
-.env
 todo
+.env
 test.py
 test2.py
-
-env/
+logs.log
+temp.ipynb
+.streamlit/secrets.toml
