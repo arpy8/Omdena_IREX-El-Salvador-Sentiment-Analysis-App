@@ -23,11 +23,11 @@ def analyse_page():
             st.session_state['master_df'] = None
 
         with st.spinner("Scraping data..."):
-            # df_author = main_tweet_dataframe(twitter_url)
-            # df_comments = comments_dataframe(twitter_url)
+            df_author = main_tweet_dataframe(twitter_url)
+            df_comments = comments_dataframe(twitter_url)
             
-            df_author = pd.read_csv('assets/dataset/temp_output_author.csv')
-            df_comments = pd.read_csv('assets/dataset/temp_output_comments.csv')
+            # df_author = pd.read_csv('assets/dataset/temp_output_author.csv')
+            # df_comments = pd.read_csv('assets/dataset/temp_output_comments.csv')
             
             master_df = combine_author_and_comments_df(df_author, df_comments)
             st.session_state['master_df'] = master_df
