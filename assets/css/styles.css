@@ -1,8 +1,22 @@
-/* #root {
-    backdrop-filter: blur(10px);
-} */
-
+@import url('https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap');
+
+
+h1 {
+    font-family: "Quicksand", sans-serif;
+    color: #000;
+}   
+.top {
+    padding: 70px 0px 250px;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+.caption {
+    padding: 80px 0px;
+}
+
 .custom {
     font-family: "Dosis", sans-serif;
     font-optical-sizing: auto;
@@ -30,13 +44,6 @@ button[data-testid='baseButton-secondary'] {
     backdrop-filter: blur(100px);
 }
 
-button[data-testid="baseButton-secondaryFormSubmit"]
-{
-    /* padding: 100px 0 !important; */
-    /* background-color: tan !important; */
-}
-
-
 div[data-testid="stMultiSelect"] {
     background-color: transparent;
 }
@@ -50,18 +57,6 @@ div[data-baseweb="select"] *
     background-color: transparent;
 }
 
-/* .stTextArea *
-{
-    background-color: transparent;
-    border-color: #ffffff80;
-} */
-
-/* span[data-baseweb="tag"]
-{
-    background-color: #ffffff05;
-    border: 1px solid #ffffff80;
-} */
-
 div[data-baseweb="popover"] *
 {
     background-color: transparent !important;
@@ -74,6 +69,11 @@ div[data-baseweb="popover"] *
 svg[data-testid="stExpanderToggleIcon"]
 {
     opacity: 0%;
+}
+
+a {
+    text-decoration: none;
+    color: black !important;
 }
 
 @media(hover:hover) and (min-width: 600px) and (max-width: 769px){
