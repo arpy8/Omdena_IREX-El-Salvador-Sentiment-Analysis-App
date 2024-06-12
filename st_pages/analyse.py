@@ -9,7 +9,7 @@ def analyse_page():
     cols = st.columns([5,1,1])
     
     with cols[0]:
-        twitter_url = st.text_input("Paste your link here:", value="https://x.com/Google/status/1790555395041472948")
+        twitter_url = st.text_input("Paste your link here:", placeholder="https://x.com/Google/status/1790555395041472948")
     
     with cols[1]:
         st.write("<br>", unsafe_allow_html=True)
