@@ -1,8 +1,8 @@
-import plotly.express as px
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-from reportlab.lib.utils import ImageReader
 from io import BytesIO
+import streamlit as st
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.utils import ImageReader
 
 def generate_pdf(fig1=None, fig2=None, fig3=None, fig4=None, filename="output.pdf"):
     try:
@@ -51,20 +51,36 @@ def generate_pdf(fig1=None, fig2=None, fig3=None, fig4=None, filename="output.pd
         
         buffer.seek(0)
     
-        # with open(filename, "wb") as f:
-        #     f.write(buffer.getbuffer())
+        with open(filename, "wb") as f:
+            f.write(buffer.getbuffer())
         
-        return buffer
+        return "Successfully generated PDF"
     
     except Exception as e:
         return f"Error: {e}"
     
+def construct_pdf():
+    fig1 = st.session_state["sentiment_over_date"]
+    fig2 = st.session_state["display_target_count"]
+    fig3 = st.session_state["most_common_trigrams"]
+    fig4 = st.session_state["display_word_cloud"]
+    
+    return generate_pdf(fig1, fig2, fig3, fig4)
 
 if __name__=="__main__":
-    df = px.data.iris()
-    fig1 = "test message", px.scatter(df, x='sepal_length', y='petal_length', color='species')
-    fig2 = "test message", px.scatter(df, x='sepal_length', y='petal_length', color='species')
-    fig3 = "test message", px.scatter(df, x='sepal_length', y='petal_length', color='species')
-    fig4 = "test message", px.scatter(df, x='sepal_length', y='petal_length', color='species')
+    import pandas as pd
+    from utils.graph_functions import sentiment_over_date, \
+                                        display_target_count, \
+                                            most_common_trigrams, \
+                                                display_word_cloud, \
+                                                    display_word_cloud
+    
+    master_df = pd.read_csv('assets/dataset/temp_output_combined.csv')
+    df = pd.read_csv('assets/dataset/master.csv')
+    
+    fig1 = "Sentiment Over Date", sentiment_over_date(master_df)
+    fig2 = "Display Target Count", display_target_count(master_df)
+    fig3 = "Most Common Trigrams", most_common_trigrams(master_df, pdf=True)
+    fig4 = "Display Word Cloud", display_word_cloud(master_df)
     
     print(generate_pdf(fig1, fig2, fig3, fig4))
