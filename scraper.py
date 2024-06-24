@@ -32,6 +32,14 @@ REMOVE_COLUMNS_COMMENTS = [
     "author__description",
 ]
 
+INT_COLUMNS = [
+    "viewCount",
+    "retweetCount",
+    "likeCount",
+    "replyCount",
+    "author__followers"
+]
+
 APIFY_ACTOR_ID = '61RPP7dywgiy0JPD0'
 APIFY_TOKEN = st.secrets['APIFY_TOKEN']
 
