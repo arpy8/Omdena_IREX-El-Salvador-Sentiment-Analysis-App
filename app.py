@@ -23,7 +23,7 @@ with st.sidebar:
             'navtab': {'background-color':'#fff'},
             'tabOptionsStyle': {':hover :hover': {'color': '#170034', 'cursor': 'pointer'}},
         },
-        default_choice=0)
+        default_choice=2)
 
 if selected_task == 'Home Page':
     home_page()

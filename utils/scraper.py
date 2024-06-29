@@ -74,7 +74,7 @@ def flatten_response(response):
     }
 
 
-def main_tweet_dataframe(url):
+def fetch_main_tweet_dataframe(url):
     """ Given a tweet URL, returns a dataframe for it """
 
     # Input validation
@@ -95,7 +95,7 @@ def main_tweet_dataframe(url):
     return pd.DataFrame([flattened_data], columns=TWEETS_COLUMNS_LIST)
 
 
-def comments_dataframe(url):
+def fetch_comments_dataframe(url):
     """ Given a tweet URL, returns a dataframe for the comments related to that tweet """
 
     # Input validation

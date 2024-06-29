@@ -10,3 +10,6 @@ test2.py
 logs.log
 temp.ipynb
 .streamlit/secrets.toml
+test*
+
+*copy*

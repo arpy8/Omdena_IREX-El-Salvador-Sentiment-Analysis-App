@@ -1,6 +1,6 @@
 import pandas as pd
 import streamlit as st
-from utils.scraper import main_tweet_dataframe, comments_dataframe
+from utils.scraper import fetch_main_tweet_dataframe, fetch_comments_dataframe
 from utils.utils import load_header, is_valid_twitter_url, combine_author_and_comments_df
 
 def analyse_page():
@@ -9,7 +9,7 @@ def analyse_page():
     cols = st.columns([5,1,1])
     
     with cols[0]:
-        twitter_url = st.text_input("Paste your link here:", placeholder="https://x.com/Google/status/1790555395041472948")
+        twitter_url = st.text_input("Paste your link here:", placeholder="https://x.com/Google/status/1790555395041472948").strip()
     
     with cols[1]:
         st.write("<br>", unsafe_allow_html=True)
@@ -23,8 +23,8 @@ def analyse_page():
             st.session_state['master_df'] = None
 
         with st.spinner("Scraping data..."):
-            df_author = main_tweet_dataframe(twitter_url)
-            df_comments = comments_dataframe(twitter_url)
+            df_author = fetch_main_tweet_dataframe(twitter_url)
+            df_comments = fetch_comments_dataframe(twitter_url)
             
             # df_author = pd.read_csv('assets/dataset/temp_output_author.csv')
             # df_comments = pd.read_csv('assets/dataset/temp_output_comments.csv')

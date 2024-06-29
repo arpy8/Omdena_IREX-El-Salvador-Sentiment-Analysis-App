@@ -1,4 +1,5 @@
 import re
+import numpy as np
 import pandas as pd
 import streamlit as st
 from pysentimiento import create_analyzer
@@ -58,7 +59,7 @@ def tokenize(text):
     sent_tokenized = ' '.join(text)
     return sent_tokenized
 
-def add_sentiment_columns(master_df):
+def add_columns_for_graphs(master_df):
     data = {
         "viewCount": master_df.viewCount.iloc[0],
         "likeCount": master_df.likeCount.iloc[0],
@@ -95,7 +96,11 @@ def add_sentiment_columns(master_df):
         "negative": neg_sum
     })
 
-    return data
+    # master_df['createdAt'] = pd.to_datetime(master_df['createdAt'])
+    master_df['author__createdAt'] = pd.to_datetime(master_df['author__createdAt'])
+    master_df['account_creation_time'] = ((master_df['createdAt'] - master_df['author__createdAt']) / np.timedelta64(1, 'm')).astype(int)
+
+    return data, master_df
 
 def init_session_state():
     if 'master_df' not in st.session_state:
