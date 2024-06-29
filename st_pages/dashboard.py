@@ -6,10 +6,7 @@ from utils.utils import load_header, add_columns_for_graphs
 from utils.graph_functions import *
 
 
-def dashboard():
-    if 'master_df' not in st.session_state:
-        st.session_state['master_df'] = pd.read_csv('assets/dataset/temp_output_combined.csv')
-        
+def dashboard():        
     master_df = st.session_state['master_df']
     
     if st.session_state['tweet_data'] is None:
