@@ -36,9 +36,9 @@ elif selected_task == 'Dashboard':
         # load_header("Sentiment Analysis Dashboard")
         # st.info("Please analyze a tweet first.")
         st.session_state['master_df'] = pd.read_csv('assets/dataset/temp_output_combined.csv')
-    else:
-        with st.spinner("Loading Dashboard..."):
-            dashboard() 
+    # else:
+    with st.spinner("Loading Dashboard..."):
+        dashboard() 
 
 elif selected_task == 'About Us':
     about_us_page(CONTRIBUTORS)
