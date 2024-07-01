@@ -13,8 +13,16 @@ from nltk.tokenize import word_tokenize
 from utils.utils import get_top_ngram
 
 warnings.filterwarnings('ignore')
-nltk.download('stopwords')
-nltk.download('punkt')
+
+try:
+    nltk.data.find('corpora/stopwords.zip')
+except LookupError:
+    nltk.download('stopwords')
+
+try:
+    nltk.data.find('tokenizers/punkt.zip')
+except LookupError:
+    nltk.download('punkt')
 
 def custom_color_func(word, font_size, position, orientation, font_path, random_state):
     color_palette = ['#ff2b2b', '#83c9ff', '#0068c9']
