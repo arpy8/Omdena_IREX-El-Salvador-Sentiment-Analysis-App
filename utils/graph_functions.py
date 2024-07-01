@@ -24,6 +24,21 @@ try:
 except LookupError:
     nltk.download('punkt')
 
+@st.cache_data
+def load_data(file_path):
+    df = pd.read_csv(file_path, dtype={'text': 'string', 'sentiment_label': 'category'})
+    df['createdAt'] = pd.to_datetime(df['createdAt'])
+    df['date'] = df['createdAt'].dt.strftime('%Y-%m-%d')
+    return df
+
+@st.cache_data
+def process_texts(texts):
+    stop_words = set(stopwords.words('english'))
+    tokenized_texts = texts.apply(word_tokenize)
+    tokenized_texts = tokenized_texts.apply(lambda x: [word.lower() for word in x if word.lower() not in stop_words])
+    texts_cleaned = tokenized_texts.apply(lambda x: ' '.join(x))
+    return texts_cleaned
+
 def custom_color_func(word, font_size, position, orientation, font_path, random_state):
     color_palette = ['#ff2b2b', '#83c9ff', '#0068c9']
     return random.choice(color_palette)
@@ -65,11 +80,7 @@ def most_common_trigrams(df, pdf=False):
 
     for i in range(3):
         texts = df[df["sentiment_label"] == sentiment_list2[i]]['text']
-        
-        tokenized_texts = texts.apply(word_tokenize)
-        tokenized_texts = tokenized_texts.apply(lambda x: [word.lower() for word in x if word.lower() not in stop_words])
-        
-        texts_cleaned = tokenized_texts.apply(lambda x: ' '.join(x))
+        texts_cleaned = process_texts(texts)
         
         top_n_bigrams = get_top_ngram(texts_cleaned, 2)[:15]
         x, y = map(list, zip(*top_n_bigrams))
@@ -127,9 +138,7 @@ def display_target_count(df):
     return fig
 
 def sentiment_over_date(df):
-    df['createdAt'] = pd.to_datetime(df['createdAt'])
-    df['date'] = df['createdAt'].dt.strftime('%Y-%m-%d')
-
+    df = load_data(df)
     grouped = df.groupby(['date', 'sentiment_label']).size().unstack(fill_value=0)
 
     fig = go.Figure()
@@ -259,7 +268,3 @@ def metrics_bar(tweet_data, df):
             pos.metric(label=":green[Positive]", value=tweet_data["positive"])
             neu.metric(label=":gray[Neutral]", value=tweet_data["neutral"])
             neg.metric(label=":red[Negative]", value=tweet_data["negative"])
-
-
-if __name__ == "__main__":
-    pass
