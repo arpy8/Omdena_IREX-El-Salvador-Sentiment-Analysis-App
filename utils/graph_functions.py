@@ -25,8 +25,8 @@ except LookupError:
     nltk.download('punkt')
 
 @st.cache_data
-def load_data(file_path):
-    df = pd.read_csv(file_path, dtype={'text': 'string', 'sentiment_label': 'category'})
+def load_data(df):
+    # df = pd.read_csv(file_path, dtype={'text': 'string', 'sentiment_label': 'category'})
     df['createdAt'] = pd.to_datetime(df['createdAt'])
     df['date'] = df['createdAt'].dt.strftime('%Y-%m-%d')
     return df
