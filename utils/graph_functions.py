@@ -7,22 +7,32 @@ from wordcloud import WordCloud
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import os
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from utils.utils import get_top_ngram
 
+NLTK_DATA = os.getenv('NLTK_PATH')
+
+if not NLTK_DATA:
+    NLTK_DATA = '/home/user/code/nltk_data'
+
+nltk.data.path.append(NLTK_DATA)
+
 warnings.filterwarnings('ignore')
 
+nltk.data.path.append(NLTK_DATA)
 try:
     nltk.data.find('corpora/stopwords.zip')
 except LookupError:
     nltk.download('stopwords')
+    nltk.download('stopwords', download_dir=NLTK_DATA)
 
 try:
     nltk.data.find('tokenizers/punkt.zip')
 except LookupError:
-    nltk.download('punkt')
+    nltk.download('punkt', download_dir=NLTK_DATA)
 
 @st.cache_data
 def load_data(df):

@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import streamlit as st
 from apify_client import ApifyClient
@@ -40,8 +41,8 @@ INT_COLUMNS = [
     "author__followers"
 ]
 
-APIFY_ACTOR_ID = '61RPP7dywgiy0JPD0'
-APIFY_TOKEN = st.secrets['APIFY_TOKEN']
+APIFY_ACTOR_ID = os.getenv('APIFY_ACTOR_ID')
+APIFY_TOKEN = os.getenv('APIFY_TOKEN')
 
 # Start client
 client = ApifyClient(APIFY_TOKEN)

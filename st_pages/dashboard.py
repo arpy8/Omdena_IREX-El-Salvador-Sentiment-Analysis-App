@@ -64,13 +64,7 @@ def dashboard():
             # neg.metric(label=":red[Negative]", value=tweet_data["negative"])
             
     with st.container(border=True):
-        cols = st.columns(3)
-    
-    charts = [bubble_fig, hist_fig, stacked_bar_fig]
-    
-    for i in range(3):
-        with cols[i]:
-            st.plotly_chart(charts[i](master_df), use_container_width=True)
+        st.plotly_chart(stacked_bar_fig(master_df), use_container_width=True)
         
     
 if __name__ == "__main__":
