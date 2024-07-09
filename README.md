@@ -8,5 +8,5 @@ pinned: false
 ---
 
 # Omdena's Sentiment Analysis Tool for Political Actors in El Salvador Weba App
-w
-Link: https://omdena-irex-el-salvador-sentiment-analysis-app-demo.streamlit.app/
+
+Link: https://arpy8-omdena-irex-sentiment-analysis.hf.space/
